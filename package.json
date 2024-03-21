@@ -1,0 +1,22 @@
+{
+  "name": "api_rest_blog",
+  "version": "1.0.0",
+  "description": "API REST BLOG",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "CamiloDEV",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.1",
+    "mongoose": "^8.2.2",
+    "multer": "^1.4.5-lts.1",
+    "validator": "^13.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
