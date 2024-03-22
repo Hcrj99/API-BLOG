@@ -1,4 +1,6 @@
-const { conection } = require("./Database/conection");
+const { conection } = require("./Database/conection");//conection with database
+const express = require("express");
+const cors = require("cors");
 
 //Satrt App
 console.log("Start App");
@@ -6,6 +8,27 @@ console.log("Start App");
 
 //conect with database
 conection();
+
+
+//server
+const app = express();
+const port = 3900;
+
+//configure cors
+app.use(cors());//middle were run after other things or rutes
+
+
+//convert body to object js
+app.use(express.json());//convert all in object js
+
+
+//create rutes
+
+
+//create server
+app.listen(port, () => {
+    console.log("server run in port"+port);
+});//port to listen
 
 
 
