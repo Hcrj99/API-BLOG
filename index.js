@@ -23,25 +23,13 @@ app.use(express.json());//convert all in object js
 
 
 //create rutes
-app.get("/test", (req, res) => {
-
-    console.log("start end point test");
+const rutesArticle = require("./Rutes/article");
 
 
-    return res.status(200).json([
-        {
-            curse: "react",
-            name: "camilo",
-            url: "camiloDEV.com"
-        },
-        {
-            curse: "react",
-            name: "camilo",
-            url: "camiloDEV.com"
-        }
-    ])
+//set rutes
+app.use("/api/", rutesArticle);
 
-});//rute for get -navegator
+
 
 
 //create server
