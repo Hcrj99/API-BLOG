@@ -2,7 +2,7 @@ const { conection } = require("./Database/conection");//conection with database
 const express = require("express");
 const cors = require("cors");
 
-//Satrt App
+//Start App
 console.log("Start App");
 
 
@@ -14,7 +14,7 @@ conection();
 const app = express();
 const port = 3900;
 
-//configure cors
+//configure cors                                                                                                      
 app.use(cors());//middle were run after other things or rutes
 
 
