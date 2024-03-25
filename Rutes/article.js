@@ -7,5 +7,8 @@ router.get("/test", ArticleController.test);
 
 router.get("/testing", ArticleController.testing);
 
+//util rute
+router.post("/create", ArticleController.create);
+
 
 module.exports = router;

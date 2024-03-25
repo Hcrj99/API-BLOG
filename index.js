@@ -19,7 +19,8 @@ app.use(cors());//middle were run after other things or rutes
 
 
 //convert body to object js
-app.use(express.json());//convert all in object js
+app.use(express.json());//convert all in object js --receive data in content type app/json
+app.use(express.urlencoded({extended:true}));//form---urlencode 
 
 
 //create rutes
@@ -28,8 +29,6 @@ const rutesArticle = require("./Rutes/article");
 
 //set rutes
 app.use("/api/", rutesArticle);
-
-
 
 
 //create server
