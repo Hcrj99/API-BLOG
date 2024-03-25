@@ -1,6 +1,6 @@
 const { json } = require("express");
 const validator = require("validator");
-const { param } = require("../Rutes/article");
+const Article = require("../Models/Article");
 
 const test = (req, res) => {
     return res.status(200).json({
@@ -38,7 +38,7 @@ const create = (req, res) => {
     //dont empty + length
     try {
 
-        let validateTitle = !validator.isEmpty(params.title) && validator.isLength(params.title, {min: 5, max:15});
+        let validateTitle = !validator.isEmpty(params.title) && validator.isLength(params.title, {min: 5, max:undefined});
         let validateContent = !validator.isEmpty(params.content);
 
         if (!validateTitle || !validateContent) {
@@ -52,18 +52,27 @@ const create = (req, res) => {
         })
     }
 
-
-    //create object to save
-
-
-    //assign values to object bassed in model 
-
-    //save the article in db
-
-
-    return res.status(200).json({
-        message: "create",
-        params
+    //create object to save + asing parameters
+    const article = new Article(params);
+    
+     //save the article in db
+    article.save().then((articlesave) => {
+        if(!articlesave){
+            return res.status(400), json({
+                status: "error",
+                message: "missing data, dont save data"
+            })
+        }
+        return res.status(200).json({
+            status: "success",
+            article: articlesave,
+            message: "article created correct"
+        });
+    }).catch((error) => {
+            return res.status(error), json({
+                status: "error",
+                message: "missing data, dont save data"
+            })
     });
 }
 
