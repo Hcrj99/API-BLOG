@@ -11,4 +11,7 @@ router.get("/testing", ArticleController.testing);
 router.post("/create", ArticleController.create);
 
 
+router.get("/articles", ArticleController.getArticles);
+
+
 module.exports = router;

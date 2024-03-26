@@ -46,7 +46,7 @@ const create = (req, res) => {
         }
 
     } catch (error) {
-        return res.status(400), json({
+        return res.status(400).json({
             status: "error",
             message: "missing data to send"
         })
@@ -58,7 +58,7 @@ const create = (req, res) => {
      //save the article in db
     article.save().then((articlesave) => {
         if(!articlesave){
-            return res.status(400), json({
+            return res.status(400).json({
                 status: "error",
                 message: "missing data, dont save data"
             })
@@ -69,15 +69,34 @@ const create = (req, res) => {
             message: "article created correct"
         });
     }).catch((error) => {
-            return res.status(error), json({
+            return res.status(error).json({
                 status: "error",
                 message: "missing data, dont save data"
             })
     });
 }
 
+//get articles
+const getArticles = (req, res) => {
+
+    Article.find({}).then((articles) => {
+
+        return res.status(200).send({
+            status: "succes",
+            articles: articles
+        });
+
+    }).catch((error) => {
+        return res.status(error).json({
+            status: "error", 
+            message: "missing articles"
+        });
+    });
+}
+
 module.exports = {
     test,
     testing,
-    create
+    create,
+    getArticles
 }
