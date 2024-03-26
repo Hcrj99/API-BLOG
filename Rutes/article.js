@@ -13,5 +13,7 @@ router.post("/create", ArticleController.create);
 
 router.get("/articles/:last?", ArticleController.getArticles);
 
+router.get("/article/:id", ArticleController.one);
+
 
 module.exports = router;

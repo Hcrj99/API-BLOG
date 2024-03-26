@@ -101,9 +101,31 @@ const getArticles = (req, res) => {
     });
 }
 
+//get one article
+
+const one = (req, res) => {
+    //get id by url
+    let id = req.params.id;
+    //find article
+    Article.findById(id).then(article => {
+        return res.status(200).json({
+            status:"success",
+            article
+        })
+    }).catch(error => {
+        return res.status(error).json({
+            status: "error",
+            message: "missing articles"
+        });
+    })
+    //if not exist return error or result
+
+}
+
 module.exports = {
     test,
     testing,
     create,
-    getArticles
+    getArticles,
+    one
 }
