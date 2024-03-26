@@ -38,7 +38,7 @@ const create = (req, res) => {
     //dont empty + length
     try {
 
-        let validateTitle = !validator.isEmpty(params.title) && validator.isLength(params.title, {min: 5, max:undefined});
+        let validateTitle = !validator.isEmpty(params.title) && validator.isLength(params.title, { min: 5, max: undefined });
         let validateContent = !validator.isEmpty(params.content);
 
         if (!validateTitle || !validateContent) {
@@ -54,10 +54,10 @@ const create = (req, res) => {
 
     //create object to save + asing parameters
     const article = new Article(params);
-    
-     //save the article in db
+
+    //save the article in db
     article.save().then((articlesave) => {
-        if(!articlesave){
+        if (!articlesave) {
             return res.status(400).json({
                 status: "error",
                 message: "missing data, dont save data"
@@ -69,17 +69,24 @@ const create = (req, res) => {
             message: "article created correct"
         });
     }).catch((error) => {
-            return res.status(error).json({
-                status: "error",
-                message: "missing data, dont save data"
-            })
+        return res.status(error).json({
+            status: "error",
+            message: "missing data, dont save data"
+        })
     });
 }
 
 //get articles
 const getArticles = (req, res) => {
 
-    Article.find({}).then((articles) => {
+    let query = Article.find({});
+
+    if(req.params.last){
+        query.limit(req.params.last);
+    }
+
+
+    query.sort({ date: -1 }).then((articles) => {
 
         return res.status(200).send({
             status: "succes",
@@ -88,7 +95,7 @@ const getArticles = (req, res) => {
 
     }).catch((error) => {
         return res.status(error).json({
-            status: "error", 
+            status: "error",
             message: "missing articles"
         });
     });
