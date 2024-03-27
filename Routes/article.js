@@ -16,7 +16,7 @@ router.get("/article/:id", ArticleController.one);
 
 router.delete("/article/:id", ArticleController.deleteArticle);
 
-
+router.put("/article/:id", ArticleController.editArticle);
 
 
 module.exports = router;

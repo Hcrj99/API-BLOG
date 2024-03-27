@@ -24,10 +24,10 @@ app.use(express.urlencoded({extended:true}));//form---urlencode
 
 
 //create rutes
-const rutesArticle = require("./Rutes/article");
+const rutesArticle = require("./Routes/article");
 
 
-//set rutes
+//set routes
 app.use("/api/", rutesArticle);
 
 

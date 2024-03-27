@@ -1,4 +1,3 @@
-const { json } = require("express");
 const validator = require("validator");
 const Article = require("../Models/Article");
 
@@ -81,7 +80,7 @@ const getArticles = (req, res) => {
 
     let query = Article.find({});
 
-    if(req.params.last){
+    if (req.params.last) {
         query.limit(req.params.last);
     }
 
@@ -108,7 +107,7 @@ const one = (req, res) => {
     //find article
     Article.findById(id).then(article => {
         return res.status(200).json({
-            status:"success",
+            status: "success",
             article
         })
     }).catch(error => {
@@ -120,12 +119,12 @@ const one = (req, res) => {
 }
 
 //delete articles
-const deleteArticle = (req,res) => {
+const deleteArticle = (req, res) => {
     //get id by url
     let id = req.params.id;
-    Article.findOneAndDelete({_id: id}).then(articleDelete => {
+    Article.findOneAndDelete({ _id: id }).then(articleDelete => {
         return res.status(200).json({
-            status:"success",
+            status: "success",
             articleDelete,
             message: "article delete"
         })
@@ -137,11 +136,51 @@ const deleteArticle = (req,res) => {
     })
 }
 
+
+//edit and upgrade articles
+const editArticle = (req, res) => {
+    //get id by url
+    let id = req.params.id;
+
+    //get new data from body
+    let parameters = req.body;
+
+    //validate data
+    try {
+        let validateTitle = !validator.isEmpty(parameters.title) && validator.isLength(parameters.title, { min: 5, max: undefined });
+        let validateContent = !validator.isEmpty(parameters.content);
+
+        if (!validateTitle || !validateContent) {
+            throw new Error(" The information could not be validated");
+        }
+    } catch (error) {
+        return res.status(400).json({
+            status: "error",
+            message: "missing data to send"
+        })
+    }
+
+    //find + upgrade articles + return response
+    Article.findOneAndUpdate({_id: id}, req.body, {new: true}).then(articleUpgrade => {
+        return res.status(200).json({
+            status: "success",
+            articleUpgrade,
+            message: "article edited"
+        })
+    }).catch(error => {
+        return res.status(error).json({
+            status: "error",
+            message: "error to edite"
+        });
+    })
+}
+
 module.exports = {
     test,
     testing,
     create,
     getArticles,
     one,
-    deleteArticle
+    deleteArticle,
+    editArticle
 }
