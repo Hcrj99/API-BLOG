@@ -1,5 +1,5 @@
-const validator = require("validator");
 const Article = require("../Models/Article");
+const { validateArticle } = require("../helper/validate");
 
 const test = (req, res) => {
     return res.status(200).json({
@@ -36,20 +36,14 @@ const create = (req, res) => {
     //validate data
     //dont empty + length
     try {
-
-        let validateTitle = !validator.isEmpty(params.title) && validator.isLength(params.title, { min: 5, max: undefined });
-        let validateContent = !validator.isEmpty(params.content);
-
-        if (!validateTitle || !validateContent) {
-            throw new Error(" The information could not be validated");
-        }
-
+        validateArticle(params);
     } catch (error) {
         return res.status(400).json({
             status: "error",
             message: "missing data to send"
         })
     }
+
 
     //create object to save + asing parameters
     const article = new Article(params);
@@ -147,12 +141,7 @@ const editArticle = (req, res) => {
 
     //validate data
     try {
-        let validateTitle = !validator.isEmpty(parameters.title) && validator.isLength(parameters.title, { min: 5, max: undefined });
-        let validateContent = !validator.isEmpty(parameters.content);
-
-        if (!validateTitle || !validateContent) {
-            throw new Error(" The information could not be validated");
-        }
+        validateArticle(parameters);
     } catch (error) {
         return res.status(400).json({
             status: "error",
@@ -161,7 +150,7 @@ const editArticle = (req, res) => {
     }
 
     //find + upgrade articles + return response
-    Article.findOneAndUpdate({_id: id}, req.body, {new: true}).then(articleUpgrade => {
+    Article.findOneAndUpdate({ _id: id }, req.body, { new: true }).then(articleUpgrade => {
         return res.status(200).json({
             status: "success",
             articleUpgrade,
