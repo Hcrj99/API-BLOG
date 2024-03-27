@@ -102,7 +102,6 @@ const getArticles = (req, res) => {
 }
 
 //get one article
-
 const one = (req, res) => {
     //get id by url
     let id = req.params.id;
@@ -115,11 +114,27 @@ const one = (req, res) => {
     }).catch(error => {
         return res.status(error).json({
             status: "error",
-            message: "missing articles"
+            message: "missing article"
         });
     })
-    //if not exist return error or result
+}
 
+//delete articles
+const deleteArticle = (req,res) => {
+    //get id by url
+    let id = req.params.id;
+    Article.findOneAndDelete({_id: id}).then(articleDelete => {
+        return res.status(200).json({
+            status:"success",
+            articleDelete,
+            message: "article delete"
+        })
+    }).catch(error => {
+        return res.status(error).json({
+            status: "error",
+            message: "error to delete"
+        });
+    })
 }
 
 module.exports = {
@@ -127,5 +142,6 @@ module.exports = {
     testing,
     create,
     getArticles,
-    one
+    one,
+    deleteArticle
 }
