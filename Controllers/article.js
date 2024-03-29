@@ -1,6 +1,7 @@
 const Article = require("../Models/Article");
 const { validateArticle } = require("../helper/validate");
 const fs = require("fs");
+const path = require("path");
 
 const test = (req, res) => {
     return res.status(200).json({
@@ -168,9 +169,8 @@ const editArticle = (req, res) => {
 const up = (req, res) => {
 
     //configure multer
-
     //get images
-    if(!req.file && !req.files){
+    if (!req.file && !req.files) {
         return res.status(404).json({
             status: "error",
             message: "invalid query"
@@ -194,16 +194,40 @@ const up = (req, res) => {
             });
         })
     } else {
-
         //if all fine - upgrade image
-
-
-
-        return res.status(200).json({
-            status: "success",
-            files: req.file
+        //get id by url
+        let id = req.params.id;
+        //find + upgrade articles + return response
+        Article.findOneAndUpdate({ _id: id }, {image: req.file.filename}, { new: true }).then(articleUpgrade => {
+            return res.status(200).json({
+                status: "success",
+                articleUpgrade,
+                message: "article edited"
+            })
+        }).catch(error => {
+            return res.status(error).json({
+                status: "error",
+                message: "error to edite"
+            });
         })
     }
+}
+
+
+const imageArchive = (req, res) => {
+    let fileImage = req.params.image;
+    let fisicRoute = "./images/articles/"+fileImage;
+
+    fs.stat(fisicRoute, (error, exist) => {
+        if(exist) {
+            return res.sendFile(path.resolve(fisicRoute));
+        }else{
+            return res.status(404).json({
+                status: "error",
+                message: "error view image"
+            });
+        }
+    });
 }
 
 module.exports = {
@@ -214,5 +238,6 @@ module.exports = {
     one,
     deleteArticle,
     editArticle,
-    up
+    up,
+    imageArchive
 }

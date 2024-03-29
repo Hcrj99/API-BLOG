@@ -35,5 +35,7 @@ router.put("/article/:id", ArticleController.editArticle);
 
 router.post("/up-image/:id", ups.single("file"), ArticleController.up);
 
+router.get("/article-image/:image",  ArticleController.imageArchive);
+
 
 module.exports = router;
