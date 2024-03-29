@@ -198,7 +198,7 @@ const up = (req, res) => {
         //get id by url
         let id = req.params.id;
         //find + upgrade articles + return response
-        Article.findOneAndUpdate({ _id: id }, {image: req.file.filename}, { new: true }).then(articleUpgrade => {
+        Article.findOneAndUpdate({ _id: id }, { image: req.file.filename }, { new: true }).then(articleUpgrade => {
             return res.status(200).json({
                 status: "success",
                 articleUpgrade,
@@ -216,18 +216,42 @@ const up = (req, res) => {
 
 const imageArchive = (req, res) => {
     let fileImage = req.params.image;
-    let fisicRoute = "./images/articles/"+fileImage;
+    let fisicRoute = "./images/articles/" + fileImage;
 
     fs.stat(fisicRoute, (error, exist) => {
-        if(exist) {
+        if (exist) {
             return res.sendFile(path.resolve(fisicRoute));
-        }else{
+        } else {
             return res.status(404).json({
                 status: "error",
                 message: "error view image"
             });
         }
     });
+}
+
+const findArticles = (req, res) => {
+    //get string of search
+    let search = req.params.find;
+    console.log(search)
+    //find OR 
+    Article.find({
+        "$or": [
+            { "title": { "$regex": search, "$options": "i" } },
+            { "content": { "$regex": search, "$options": "i" } },
+        ]
+    })
+        .sort({ date: -1 }).then(findArticles => {
+            return res.status(200).json({
+                status: "success",
+                article: findArticles
+            })
+        }).catch(error => {
+            return res.status(error).json({
+                status: "error",
+                message: "error article dont find"
+            })
+        })
 }
 
 module.exports = {
@@ -239,5 +263,6 @@ module.exports = {
     deleteArticle,
     editArticle,
     up,
-    imageArchive
+    imageArchive,
+    findArticles
 }
