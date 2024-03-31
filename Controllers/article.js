@@ -84,7 +84,7 @@ const getArticles = (req, res) => {
     query.sort({ date: -1 }).then((articles) => {
 
         return res.status(200).send({
-            status: "succes",
+            status: "success",
             articles: articles
         });
 
